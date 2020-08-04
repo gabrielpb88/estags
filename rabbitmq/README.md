@@ -1,15 +1,18 @@
 # RabbitMQ
 
-RabbitMQ é uma ferramenta para distribuição de mensagens.
+RabbitMQ é uma ferramenta de mensageria.
 
-Mensagens são organizadas em filas.
+Mensagens são organizadas em filas (queues).
 
 Dados podem ser escritos e lidos da fila, isso permite comunicação entre aplicações.
 
-## Subscriber
+Porta padrão para gerenciamento do RabbitMQ: 15672
 
-Subscriber nada mais é que um processo que escreve em uma determinada fila.
+* A producer is a user application that sends messages.
+* A queue is a buffer that stores messages.
+* A consumer is a user application that receives messages.
 
-## Consumer
+The core idea in the messaging model in RabbitMQ is that the producer never sends any messages directly to a queue.
 
-Consumer é um processo que consome (lê) de uma determinada fila.
+Instead, the producer can only send messages to an exchange. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules for that are defined by the exchange type.
+
