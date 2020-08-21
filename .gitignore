@@ -106,3 +106,7 @@ dist
 
 # VSCode config files
 .vscode/
+
+# WebStorm config files
+.idea
+**/.idea
