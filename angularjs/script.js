@@ -1,40 +1,38 @@
 (function () {
 
-    var app = angular.module('githubViewer', [])
+    const app = angular.module('githubViewer', []);
 
-    var MainController = async function ($scope, $http, $interval, $log, $location, $anchorScroll) {
+    const MainController = function ($scope, github, $interval, $log, $location, $anchorScroll) {
 
-        var onUserComplete = function (response) {
-            $scope.user = response.data
-            $http.get($scope.user.repos_url)
-                .then(onRepos, onError);
-        }
-
-        var onRepos = function (response) {
-            $scope.repos = response.data
+        const onError = function () {
+            $scope.error = "Could not fetch the data."
+        };
+        const onRepos = function (data) {
+            $scope.repos = data
             $location.hash("userDetails")
             $anchorScroll();
-        }
+        };
+        const onUserComplete = function (data) {
+            $scope.user = data
+            github.getRepos($scope.user).then(onRepos, onError);
+        };
 
-        var onError = function (reason) {
-            $scope.error = "Could not fetch the data."
-        }
 
-        var decrementCountdown = function () {
+        const decrementCountdown = function () {
             $scope.countdown -= 1
             if ($scope.countdown < 1) {
                 $scope.search($scope.username)
             }
-        }
+        };
 
-        var countdownInterval = null
-        var startCountdown = function () {
+        let countdownInterval = null;
+        const startCountdown = function () {
             countdownInterval = $interval(decrementCountdown, 1000, $scope.countdown);
-        }
+        };
 
         $scope.search = function (username) {
             $log.info("Searching for " + username)
-            $http.get("https://api.github.com/users/" + username)
+            github.getUser(username)
                 .then(onUserComplete, onError)
             if (countdownInterval) {
                 $interval.cancel(countdownInterval)
@@ -47,7 +45,7 @@
         $scope.repoSortOrder = "stargazers_count"
         $scope.countdown = 5
         startCountdown()
-    }
+    };
 
     app.controller('MainController', MainController)
 })();
