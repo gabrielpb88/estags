@@ -1,0 +1,13 @@
+{
+  "name": "javascript-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha './test/**/*.spec.js'"
+  },
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3"
+  }
+}
